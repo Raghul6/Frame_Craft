@@ -1,0 +1,272 @@
+/* Add / edit frame form and the size editor */
+
+/* ---------- Frame form ---------- */
+.frame-form .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 var(--spacing-lg);
+}
+
+.frame-form .span-2 {
+  grid-column: 1 / -1;
+}
+
+.frame-form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+}
+
+.frame-form label,
+.size-editor-head {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.frame-form input,
+.frame-form select,
+.frame-form textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d6cfc6;
+  background: var(--color-bg);
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  outline: none;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
+.frame-form textarea {
+  resize: vertical;
+}
+
+.frame-form input:focus,
+.frame-form select:focus,
+.frame-form textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.frame-form [aria-invalid="true"] {
+  border-color: #b44a4a;
+}
+
+.frame-form .field-error {
+  color: #b44a4a;
+  font-size: 0.74rem;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
+.frame-form .field-error.block {
+  display: block;
+  margin-bottom: var(--spacing-md);
+  font-size: 0.85rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.frame-form .toggle {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.frame-form .toggle input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.1rem;
+  accent-color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: var(--spacing-md);
+  font-size: 0.8rem;
+  color: var(--admin-muted);
+}
+
+.preset-chip {
+  padding: 0.35rem 0.65rem;
+  border: 1px dashed #c9bfb4;
+  background: transparent;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+.preset-chip:hover:not(:disabled) {
+  border-style: solid;
+  border-color: var(--color-primary);
+  background: #faf7f3;
+}
+
+.preset-chip:disabled {
+  opacity: 0.4;
+  cursor: default;
+  text-decoration: line-through;
+}
+
+/* Desktop: one aligned grid row per size */
+.size-editor {
+  --size-cols: minmax(70px, 1fr) 14px minmax(70px, 1fr) 72px
+    minmax(120px, 1.6fr) minmax(90px, 1.1fr) minmax(70px, 0.8fr) 34px;
+}
+
+.size-editor-head,
+.size-row {
+  display: grid;
+  grid-template-columns: var(--size-cols);
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.size-editor-head {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--admin-border);
+  margin-bottom: 0.6rem;
+}
+
+.size-row {
+  padding: 0.35rem 0;
+}
+
+.size-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.size-cell-label {
+  display: none;
+}
+
+.size-times {
+  align-self: center;
+  text-align: center;
+  color: var(--admin-muted);
+  padding-top: 0.1rem;
+}
+
+.size-remove {
+  margin-top: 0.2rem;
+}
+
+.size-summary {
+  margin-top: var(--spacing-md);
+  font-size: 0.85rem;
+  color: var(--admin-muted);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+}
+
+/* Tablet: sidebar becomes a horizontal tab bar */
+@media (max-width: 900px) {
+  /* Size editor: each size becomes a compact card */
+  .size-editor-head {
+    display: none;
+  }
+
+  .size-row {
+    grid-template-columns: 1fr 14px 1fr 80px;
+    grid-template-areas:
+      "w x h unit"
+      "label label label label"
+      "price price stock stock"
+      "remove remove remove remove";
+    gap: 0.6rem;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--admin-border);
+    background: #fcfaf7;
+  }
+
+  .size-row > :nth-child(1) {
+    grid-area: w;
+  }
+
+  .size-row > :nth-child(2) {
+    grid-area: x;
+    padding-top: 1.4rem;
+  }
+
+  .size-row > :nth-child(3) {
+    grid-area: h;
+  }
+
+  .size-row > :nth-child(4) {
+    grid-area: unit;
+  }
+
+  .size-row > :nth-child(5) {
+    grid-area: label;
+  }
+
+  .size-row > :nth-child(6) {
+    grid-area: price;
+  }
+
+  .size-row > :nth-child(7) {
+    grid-area: stock;
+  }
+
+  .size-remove {
+    grid-area: remove;
+    justify-self: end;
+  }
+
+  .size-cell-label {
+    display: block;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .frame-form .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Motion ---------- */
+/* New size rows (custom or quick-add) slide in. */
+.size-row {
+  animation: slide-down var(--duration-base) var(--ease-out) both;
+}
+
+.preset-chip:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.preset-chip:active:not(:disabled) {
+  transform: scale(0.96);
+}

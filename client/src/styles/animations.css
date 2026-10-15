@@ -1,0 +1,193 @@
+/* Shared motion: timing tokens, keyframes, hover/press feedback, page and
+   scroll-reveal transitions. Only transform/opacity are animated (GPU-cheap). */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 600ms;
+  --stagger: 70ms;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes settle-zoom {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ---------- Page transitions (MainLayout / AdminLayout key this by URL) ---------- */
+.route-transition {
+  animation: fade-up var(--duration-base) var(--ease-out) both;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(44, 37, 31, 0.12);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+
+/* Arrow icons nudge forward on hover */
+.btn svg {
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.btn:hover:not(:disabled) svg:last-child {
+  transform: translateX(3px);
+}
+
+.icon-btn,
+.icon-action,
+.admin-pagination button,
+.preset-chip {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.icon-btn:hover,
+.icon-action:hover:not(:disabled),
+.admin-pagination button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.icon-btn:active,
+.icon-action:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+/* ---------- Scroll reveal (useRevealOnScroll adds .is-visible) ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal="2"] {
+  transition-delay: calc(var(--stagger) * 1);
+}
+[data-reveal="3"] {
+  transition-delay: calc(var(--stagger) * 2);
+}
+[data-reveal="4"] {
+  transition-delay: calc(var(--stagger) * 3);
+}
+
+/* ---------- Feedback ---------- */
+.alert {
+  animation: slide-down var(--duration-base) var(--ease-out) both;
+}
+
+.alert-error {
+  animation:
+    slide-down var(--duration-base) var(--ease-out) both,
+    shake 0.4s var(--ease-in-out) var(--duration-base);
+}
+
+.field-error {
+  animation: fade-in var(--duration-base) var(--ease-out) both;
+}
+
+.error-fallback {
+  animation: fade-up var(--duration-slow) var(--ease-out) both;
+}
+
+.spinner-full {
+  animation: fade-in var(--duration-base) var(--ease-out) 150ms both;
+}
+
+/* ---------- Respect "reduce motion" ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

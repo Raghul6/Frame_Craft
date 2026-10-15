@@ -1,0 +1,112 @@
+/* Login / register page layout */
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: var(--spacing-xl) var(--spacing-md);
+  min-height: calc(100vh - 200px);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-card h2 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1.15;
+}
+
+.auth-intro {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #d6cfc6;
+}
+
+.segmented button {
+  background: transparent;
+  border: none;
+  padding: 0.6rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+}
+
+.segmented button.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.auth-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.auth-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .auth-page {
+    min-height: 0;
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-xl);
+  }
+}
+
+/* Mobile: full-bleed card, larger touch targets, 16px inputs (prevents iOS zoom) */
+@media (max-width: 600px) {
+  .auth-page {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+  }
+
+  .auth-card {
+    padding: 1.75rem 1.25rem;
+    border-left: none;
+    border-right: none;
+  }
+
+  .segmented button {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+/* ---------- Motion ---------- */
+.auth-card {
+  animation: fade-up var(--duration-slow) var(--ease-out) both;
+}
+
+.segmented button {
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}

@@ -1,0 +1,41 @@
+/* Order detail: status control and totals */
+
+.order-totals {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  gap: 0.4rem 1.5rem;
+  max-width: 320px;
+  margin: var(--spacing-md) 0 0 auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--admin-border);
+  font-size: 0.9rem;
+}
+
+.order-totals dt {
+  color: var(--admin-muted);
+}
+
+.order-totals dd {
+  text-align: right;
+}
+
+.status-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.status-control label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-muted);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .order-totals {
+    max-width: none;
+  }
+}
