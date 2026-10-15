@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { HALF_WIDTH_IMAGE_SIZES, HERO } from "../../constants/home";
+import { ICON_SIZE } from "../../constants/ui";
 
 const HeroSection = () => (
   <section className="hero">
@@ -9,10 +10,10 @@ const HeroSection = () => (
       <p className="hero-description">{HERO.description}</p>
       <div className="hero-buttons">
         <button className="btn btn-primary">
-          Shop Best Sellers <ArrowRight size={16} />
+          Shop Best Sellers <ArrowRight size={ICON_SIZE.md} />
         </button>
         <button className="btn btn-secondary">
-          Build a Custom Frame <ArrowRight size={16} />
+          Build a Custom Frame <ArrowRight size={ICON_SIZE.md} />
         </button>
       </div>
       <div className="hero-features">

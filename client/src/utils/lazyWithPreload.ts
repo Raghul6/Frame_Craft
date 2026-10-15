@@ -1,5 +1,6 @@
 import { lazy, type ComponentType } from "react";
 import type { PreloadableComponent } from "../types/routes";
+import { IDLE_FALLBACK_MS, IDLE_TIMEOUT_MS } from "../constants/ui";
 
 /**
  * React.lazy plus a `.preload()` that starts downloading the chunk early (on hover,
@@ -22,8 +23,8 @@ export const lazyWithPreload = <P extends object>(
 /** Runs `task` when the browser is idle (falls back to a short timeout). */
 export const whenIdle = (task: () => void): void => {
   if (typeof window.requestIdleCallback === "function") {
-    window.requestIdleCallback(task, { timeout: 2000 });
+    window.requestIdleCallback(task, { timeout: IDLE_TIMEOUT_MS });
   } else {
-    window.setTimeout(task, 200);
+    window.setTimeout(task, IDLE_FALLBACK_MS);
   }
 };

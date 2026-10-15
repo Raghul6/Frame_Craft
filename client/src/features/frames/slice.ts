@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Frame } from "../../types/admin";
-import type { Paginated, RequestError } from "../../types/api";
+import type { FieldErrors, Paginated } from "../../types/api";
 import type { FramesState } from "../../types/state";
 import { logoutSuccess } from "../auth/slice";
 import {
@@ -13,8 +13,8 @@ import {
 const initialState: FramesState = {
   list: createListState<Frame>(),
   current: { frame: null, status: "idle", error: null },
-  save: { status: "idle", error: null, fieldErrors: {} },
-  remove: { id: null, error: null },
+  save: { status: "idle", fieldErrors: {} },
+  remove: { id: null },
 };
 
 const framesSlice = createSlice({
@@ -23,7 +23,6 @@ const framesSlice = createSlice({
   reducers: {
     framesStart: (state) => {
       listStarted(state.list);
-      state.remove.error = null;
     },
     framesSuccess: (state, action: PayloadAction<Paginated<Frame>>) =>
       listLoaded(state.list, action.payload),
@@ -32,7 +31,7 @@ const framesSlice = createSlice({
 
     frameStart: (state) => {
       state.current = { frame: null, status: "loading", error: null };
-      state.save = { status: "idle", error: null, fieldErrors: {} };
+      state.save = { status: "idle", fieldErrors: {} };
     },
     frameSuccess: (state, action: PayloadAction<Frame>) => {
       state.current = {
@@ -46,7 +45,7 @@ const framesSlice = createSlice({
     },
 
     frameSaveStart: (state) => {
-      state.save = { status: "loading", error: null, fieldErrors: {} };
+      state.save = { status: "loading", fieldErrors: {} };
     },
     frameSaveSuccess: (state, action: PayloadAction<Frame>) => {
       state.save.status = "succeeded";
@@ -60,30 +59,29 @@ const framesSlice = createSlice({
       );
       if (index >= 0) state.list.items[index] = action.payload;
     },
-    frameSaveFail: (state, action: PayloadAction<RequestError>) => {
-      state.save = {
-        status: "failed",
-        error: action.payload.message,
-        fieldErrors: action.payload.fieldErrors,
-      };
+    // The message is shown as a toast; field errors stay next to their inputs.
+    frameSaveFail: (state, action: PayloadAction<FieldErrors>) => {
+      state.save = { status: "failed", fieldErrors: action.payload };
     },
     frameSaveErrorsCleared: (state) => {
-      state.save.error = null;
       state.save.fieldErrors = {};
     },
 
     frameDeleteStart: (state, action: PayloadAction<number>) => {
-      state.remove = { id: action.payload, error: null };
+      state.remove = { id: action.payload };
     },
-    frameDeleteSuccess: (state, action: PayloadAction<number>) => {
+    // The row stays until its slide-out animation ends (see frameRemovedFromList).
+    frameDeleteSuccess: (state) => {
       state.remove.id = null;
+    },
+    frameRemovedFromList: (state, action: PayloadAction<number>) => {
       state.list.items = state.list.items.filter(
         (f) => f.id !== action.payload,
       );
       state.list.total = Math.max(0, state.list.total - 1);
     },
-    frameDeleteFail: (state, action: PayloadAction<string>) => {
-      state.remove = { id: null, error: action.payload };
+    frameDeleteFail: (state) => {
+      state.remove = { id: null };
     },
   },
   extraReducers: (builder) => {
@@ -104,6 +102,7 @@ export const {
   frameSaveErrorsCleared,
   frameDeleteStart,
   frameDeleteSuccess,
+  frameRemovedFromList,
   frameDeleteFail,
 } = framesSlice.actions;
 export default framesSlice.reducer;

@@ -13,6 +13,9 @@ import { getPostLoginPath } from "../../utils/redirect";
 import type { RedirectState } from "../../types/auth";
 import type { LoginFormErrors } from "../../types/forms";
 import "../../styles/auth.css";
+import ButtonLabel from "../../components/common/ButtonLabel";
+import { BUTTON_LABELS, VALIDATION_MESSAGES } from "../../constants/messages";
+import { BRAND_NAME } from "../../constants/ui";
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -28,8 +31,8 @@ const LoginPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const next: LoginFormErrors = {};
-    if (!username.trim()) next.username = "Username is required";
-    if (!password) next.password = "Password is required";
+    if (!username.trim()) next.username = VALIDATION_MESSAGES.usernameRequired;
+    if (!password) next.password = VALIDATION_MESSAGES.passwordRequired;
     setErrors(next);
     if (Object.keys(next).length) return;
 
@@ -84,12 +87,12 @@ const LoginPage = () => {
             className="btn btn-primary auth-submit"
             disabled={loading}
           >
-            {loading ? "Signing in…" : "Log in"}
+            <ButtonLabel loading={loading} {...BUTTON_LABELS.login} />
           </button>
         </form>
 
         <p className="auth-switch">
-          New to FrameCraft?{" "}
+          New to {BRAND_NAME}?{" "}
           <Link
             to="/register"
             onMouseEnter={preloadRegister}

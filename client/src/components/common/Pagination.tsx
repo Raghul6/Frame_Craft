@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { PaginationProps } from "../../types/components";
+import { ICON_SIZE } from "../../constants/ui";
 
 const Pagination = ({ page, limit, total, onChange }: PaginationProps) => {
   if (total === 0) return null;
@@ -22,7 +23,7 @@ const Pagination = ({ page, limit, total, onChange }: PaginationProps) => {
           disabled={current <= 1}
           aria-label="Previous page"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={ICON_SIZE.md} />
         </button>
         <span>
           Page {current} / {pages}
@@ -33,7 +34,7 @@ const Pagination = ({ page, limit, total, onChange }: PaginationProps) => {
           disabled={current >= pages}
           aria-label="Next page"
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={ICON_SIZE.md} />
         </button>
       </div>
     </div>

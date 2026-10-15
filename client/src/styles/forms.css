@@ -170,12 +170,6 @@
   color: #8a2c2c;
 }
 
-.alert-success {
-  background: #edf4e8;
-  border-color: #c3d9b4;
-  color: #3d5e2f;
-}
-
 /* <fieldset disabled> locks a whole form while it saves without visual chrome */
 .form-lock {
   border: none;

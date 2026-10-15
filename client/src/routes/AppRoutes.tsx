@@ -7,6 +7,7 @@ import HomePage from "../pages/Home/HomePage";
 import GuestRoute from "./GuestRoute";
 import ProtectedRoutes from "./ProtectedRoutes";
 import routes, { AdminLayout, LoginPage, RegisterPage } from "./routes";
+import { ADMIN_ROLES } from "../constants/auth";
 
 // MainLayout and AdminLayout each wrap their <Outlet /> in Suspense, so this outer
 // boundary only shows while a lazy layout itself loads.
@@ -24,7 +25,9 @@ const AppRoutes = () => (
 
       <Route
         path="/admin"
-        element={<ProtectedRoutes component={AdminLayout} roles={["admin"]} />}
+        element={
+          <ProtectedRoutes component={AdminLayout} roles={ADMIN_ROLES} />
+        }
       >
         {routes.map(({ component, path, roles, name }) => (
           <Route

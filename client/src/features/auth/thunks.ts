@@ -56,7 +56,11 @@ export const bootstrapAuth = () => async (dispatch: Dispatch) => {
 
 // Revokes the session on the server (so the refresh cookie can't be reused), then
 // clears local state even if that request fails.
+let loggingOut = false;
+
 export const logout = () => async (dispatch: Dispatch) => {
+  if (loggingOut) return;
+  loggingOut = true;
   abortAllRequests();
   try {
     await api.post(API_ENDPOINTS.logout);
@@ -65,5 +69,6 @@ export const logout = () => async (dispatch: Dispatch) => {
   } finally {
     clearAccessToken();
     dispatch(logoutSuccess());
+    loggingOut = false;
   }
 };

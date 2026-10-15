@@ -5,7 +5,7 @@ import {
   FOOTER_SOCIAL,
   WORKSHOP,
 } from "../../constants/home";
-import { BRAND_NAME, LOGO } from "../../constants/ui";
+import { BRAND_NAME, ICON_SIZE, LOGO } from "../../constants/ui";
 
 const SiteFooter = () => (
   <footer className="footer">
@@ -29,7 +29,7 @@ const SiteFooter = () => (
               aria-label="Email address"
             />
             <button type="submit" aria-label="Subscribe">
-              <ArrowRight size={20} />
+              <ArrowRight size={ICON_SIZE.xl} />
             </button>
           </form>
           <p className="footer-fineprint">

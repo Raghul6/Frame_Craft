@@ -7,6 +7,7 @@ import {
 import type { SizeUnit } from "../../types/admin";
 import type { SizeRowEditorProps } from "../../types/components";
 import { autoSizeLabel } from "../../utils/frameForm";
+import { ICON_SIZE } from "../../constants/ui";
 
 /** One editable size (width × height, unit, label, price, stock) in the frame form. */
 const SizeRowEditor = ({
@@ -79,7 +80,7 @@ const SizeRowEditor = ({
         onClick={() => onRemove(row.key)}
         aria-label={`Remove size ${n}`}
       >
-        <Trash2 size={15} />
+        <Trash2 size={ICON_SIZE.action} />
       </button>
     </div>
   );

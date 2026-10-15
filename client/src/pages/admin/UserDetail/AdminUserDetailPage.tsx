@@ -11,6 +11,11 @@ import { fetchUserDetail } from "../../../features/users/thunks";
 import { useRouteId } from "../../../hooks/useRouteId";
 import type { OrderPaging } from "../../../types/forms";
 import { formatDateTime, formatMoney } from "../../../utils/format";
+import {
+  EMPTY_MESSAGES,
+  INVALID_LINK_MESSAGES,
+} from "../../../constants/messages";
+import { EMPTY_VALUE } from "../../../constants/ui";
 
 const AdminUserDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +32,7 @@ const AdminUserDetailPage = () => {
   if (!id) {
     return (
       <div className="admin-page">
-        <Alert>That user link is not valid.</Alert>
+        <Alert>{INVALID_LINK_MESSAGES.user}</Alert>
       </div>
     );
   }
@@ -59,9 +64,9 @@ const AdminUserDetailPage = () => {
                 <dt>Username</dt>
                 <dd>{user.username}</dd>
                 <dt>Email</dt>
-                <dd>{user.email ?? "—"}</dd>
+                <dd>{user.email ?? EMPTY_VALUE}</dd>
                 <dt>Mobile</dt>
-                <dd>{user.mobile ?? "—"}</dd>
+                <dd>{user.mobile ?? EMPTY_VALUE}</dd>
                 <dt>Joined</dt>
                 <dd>{formatDateTime(user.createdAt)}</dd>
               </dl>
@@ -77,7 +82,7 @@ const AdminUserDetailPage = () => {
                 <dd>
                   {user.orderCount
                     ? formatMoney(user.totalSpent / user.orderCount)
-                    : "—"}
+                    : EMPTY_VALUE}
                 </dd>
               </dl>
             </section>
@@ -89,7 +94,7 @@ const AdminUserDetailPage = () => {
             </div>
             <OrdersTable
               orders={orders?.items ?? []}
-              emptyText="This user hasn't placed any orders."
+              emptyText={EMPTY_MESSAGES.userOrders}
               hideCustomer
             />
             {orders && (

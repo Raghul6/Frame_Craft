@@ -34,11 +34,6 @@ export interface FrameFormState {
   sizes: SizeRow[];
 }
 
-/** `location.state` passed to the edit page right after a frame is created. */
-export interface FrameFormLocationState {
-  created?: boolean;
-}
-
 /** Status picked on the order page but not saved yet, tied to the order it was picked for. */
 export interface OrderStatusDraft {
   id: number;

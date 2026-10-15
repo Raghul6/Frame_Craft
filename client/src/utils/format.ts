@@ -1,7 +1,5 @@
-import { CURRENCY, DATE_LOCALE, LOCALE } from "../constants/ui";
+import { CURRENCY, DATE_LOCALE, EMPTY_VALUE, LOCALE } from "../constants/ui";
 import { reportError } from "./errors";
-
-const EMPTY = "—";
 
 const currency = new Intl.NumberFormat(LOCALE, {
   style: "currency",
@@ -23,14 +21,14 @@ function safeFormat(
     return format();
   } catch (err) {
     reportError(`format.${context}(${String(value)})`, err);
-    return EMPTY;
+    return EMPTY_VALUE;
   }
 }
 
 export const formatMoney = (value: number) =>
   Number.isFinite(value)
     ? safeFormat(() => currency.format(value), "money", value)
-    : EMPTY;
+    : EMPTY_VALUE;
 
 export const formatDateTime = (iso: string) =>
   safeFormat(() => dateTime.format(new Date(iso)), "dateTime", iso);
@@ -40,7 +38,7 @@ export const formatDate = (iso: string) =>
 
 export function formatPriceRange(prices: number[]): string {
   const valid = prices.filter(Number.isFinite);
-  if (valid.length === 0) return EMPTY;
+  if (valid.length === 0) return EMPTY_VALUE;
   const min = Math.min(...valid);
   const max = Math.max(...valid);
   return min === max

@@ -13,6 +13,7 @@ import {
   usersStart,
   usersSuccess,
 } from "./slice";
+import { LOAD_ERROR_MESSAGES } from "../../constants/messages";
 
 const listRequest = createLatestRequest();
 const detailRequest = createLatestRequest();
@@ -29,7 +30,7 @@ export const fetchUsers = (query: ListQuery) => async (dispatch: Dispatch) => {
     return response.data;
   } catch (error) {
     if (isAbortError(error)) return;
-    dispatch(usersFail(extractError(error, "Could not load users")));
+    dispatch(usersFail(extractError(error, LOAD_ERROR_MESSAGES.users)));
   } finally {
     listRequest.finish(controller);
   }
@@ -49,7 +50,7 @@ export const fetchUserDetail =
       return response.data;
     } catch (error) {
       if (isAbortError(error)) return;
-      dispatch(userDetailFail(extractError(error, "Could not load this user")));
+      dispatch(userDetailFail(extractError(error, LOAD_ERROR_MESSAGES.user)));
     } finally {
       detailRequest.finish(controller);
     }

@@ -7,6 +7,7 @@ import {
 } from "../../constants/home";
 import { HOME_SECTIONS } from "../../constants/navigation";
 import { revealOrder } from "../../utils/motion";
+import { ICON_SIZE } from "../../constants/ui";
 
 const InspirationSection = () => (
   <section id={HOME_SECTIONS.gallery} className="container py-2xl">
@@ -44,7 +45,7 @@ const InspirationSection = () => (
             className="icon-btn icon-btn-dark"
             aria-label={`Open ${INSPIRATION_MAIN.title}`}
           >
-            <ArrowUpRight size={16} />
+            <ArrowUpRight size={ICON_SIZE.md} />
           </button>
         </div>
       </div>
@@ -72,7 +73,7 @@ const InspirationSection = () => (
                 className="icon-btn icon-btn-dark icon-btn-sm"
                 aria-label={`Open ${item.title}`}
               >
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={ICON_SIZE.sm} />
               </button>
             </div>
           </div>

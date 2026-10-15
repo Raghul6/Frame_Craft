@@ -7,6 +7,7 @@ import {
 import type { Frame, FrameInput, SizePreset, SizeUnit } from "../types/admin";
 import type { FieldErrors } from "../types/api";
 import type { FrameFormState, SizeRow } from "../types/forms";
+import { VALIDATION_MESSAGES } from "../constants/messages";
 
 // Pure helpers for the add/edit frame form, kept out of the page component.
 
@@ -78,12 +79,12 @@ export const presetChipText = (preset: SizePreset): string =>
 /** Client-side checks mirroring the server's; size errors are keyed `sizes.<index>.<field>`. */
 export const validateFrameForm = (form: FrameFormState): FieldErrors => {
   const errors: FieldErrors = {};
-  if (!form.name.trim()) errors.name = "Frame name is required";
+  if (!form.name.trim()) errors.name = VALIDATION_MESSAGES.frameNameRequired;
   const imageUrl = form.imageUrl.trim();
   if (imageUrl && !IMAGE_URL_REGEX.test(imageUrl)) {
-    errors.imageUrl = "Image URL must start with https://";
+    errors.imageUrl = VALIDATION_MESSAGES.imageUrlInvalid;
   }
-  if (form.sizes.length === 0) errors.sizes = "Add at least one size";
+  if (form.sizes.length === 0) errors.sizes = VALIDATION_MESSAGES.sizesRequired;
 
   const seen = new Set<string>();
   form.sizes.forEach((row, i) => {
@@ -92,15 +93,19 @@ export const validateFrameForm = (form: FrameFormState): FieldErrors => {
     const price = toNumber(row.price);
     const stock = row.stock.trim() === "" ? 0 : toNumber(row.stock);
 
-    if (!(width > 0)) errors[`sizes.${i}.width`] = "Width > 0";
-    if (!(height > 0)) errors[`sizes.${i}.height`] = "Height > 0";
-    if (!(price >= 0)) errors[`sizes.${i}.price`] = "Enter a price";
+    if (!(width > 0))
+      errors[`sizes.${i}.width`] = VALIDATION_MESSAGES.widthInvalid;
+    if (!(height > 0))
+      errors[`sizes.${i}.height`] = VALIDATION_MESSAGES.heightInvalid;
+    if (!(price >= 0))
+      errors[`sizes.${i}.price`] = VALIDATION_MESSAGES.priceRequired;
     if (!Number.isInteger(stock) || stock < 0)
-      errors[`sizes.${i}.stock`] = "Whole number";
+      errors[`sizes.${i}.stock`] = VALIDATION_MESSAGES.stockInvalid;
 
     if (width > 0 && height > 0) {
       const key = sizeKey(width, height, row.unit);
-      if (seen.has(key)) errors[`sizes.${i}.width`] = "Duplicate size";
+      if (seen.has(key))
+        errors[`sizes.${i}.width`] = VALIDATION_MESSAGES.sizeDuplicate;
       seen.add(key);
     }
   });

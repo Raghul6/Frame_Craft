@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import DetailShell from "../../../components/admin/DetailShell";
@@ -8,6 +8,7 @@ import SizeRowEditor from "../../../components/admin/SizeRowEditor";
 import Alert from "../../../components/common/Alert";
 import FormField from "../../../components/common/FormField";
 import {
+  DESCRIPTION_ROWS,
   FRAME_FIELD_LIMITS,
   FRAME_SIZE_PRESETS,
 } from "../../../constants/admin";
@@ -20,11 +21,7 @@ import { fetchFrame, saveFrame } from "../../../features/frames/thunks";
 import { useRouteId } from "../../../hooks/useRouteId";
 import type { SizePreset } from "../../../types/admin";
 import type { FieldErrors } from "../../../types/api";
-import type {
-  FrameFormLocationState,
-  FrameFormState,
-  SizeRow,
-} from "../../../types/forms";
+import type { FrameFormState, SizeRow } from "../../../types/forms";
 import { formatMoney } from "../../../utils/format";
 import {
   createEmptyFrameForm,
@@ -37,6 +34,12 @@ import {
   validateFrameForm,
 } from "../../../utils/frameForm";
 import "./AdminFrameFormPage.css";
+import ButtonLabel from "../../../components/common/ButtonLabel";
+import { ICON_SIZE } from "../../../constants/ui";
+import {
+  BUTTON_LABELS,
+  INVALID_LINK_MESSAGES,
+} from "../../../constants/messages";
 
 /** Errors for one size row, e.g. { width: "Width > 0" } from "sizes.2.width". */
 const rowErrors = (errors: FieldErrors, index: number) => {
@@ -51,7 +54,6 @@ const rowErrors = (errors: FieldErrors, index: number) => {
 const AdminFrameFormPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const hasIdParam = useParams().id !== undefined;
   const editId = useRouteId();
   const current = useAppSelector(selectCurrentFrame);
@@ -60,20 +62,6 @@ const AdminFrameFormPage = () => {
 
   const [form, setForm] = useState<FrameFormState>(createEmptyFrameForm);
   const [localErrors, setLocalErrors] = useState<FieldErrors>({});
-  // "Frame created." arrives once via history state (this page remounts after a create).
-  const justCreated = Boolean(
-    (location.state as FrameFormLocationState | null)?.created,
-  );
-  const [notice, setNotice] = useState<string | null>(
-    justCreated ? "Frame created." : null,
-  );
-
-  // Drop the flag from history so a refresh doesn't show the notice again.
-  useEffect(() => {
-    if (justCreated)
-      navigate(location.pathname, { replace: true, state: null });
-  }, [justCreated, location.pathname, navigate]);
-
   useEffect(() => {
     dispatch(frameSaveErrorsCleared());
     if (editId) void dispatch(fetchFrame(editId));
@@ -101,7 +89,6 @@ const AdminFrameFormPage = () => {
     );
     if (Object.keys(save.fieldErrors).length)
       dispatch(frameSaveErrorsCleared());
-    setNotice(null);
   };
 
   const setField = <K extends keyof FrameFormState>(
@@ -129,22 +116,17 @@ const AdminFrameFormPage = () => {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    setNotice(null);
     const found = validateFrameForm(form);
     setLocalErrors(found);
     if (Object.keys(found).length) return;
 
-    // The thunk keeps API errors in the store (shown via `save.error` / `save.fieldErrors`).
+    // The thunk shows the success / error toast; field errors come back via `save.fieldErrors`.
     const frame = await dispatch(
       saveFrame(formToFrameInput(form), editId ?? undefined),
     );
-    if (!frame) return;
-    if (editId) {
-      setNotice("Changes saved.");
-    } else {
-      const state: FrameFormLocationState = { created: true };
-      navigate(`/admin/frames/${frame.id}`, { replace: true, state });
-    }
+    // A new frame continues on its edit page (the "created" toast stays up across the move).
+    if (frame && !editId)
+      navigate(`/admin/frames/${frame.id}`, { replace: true });
   };
 
   const addedSizes = new Set(
@@ -156,7 +138,7 @@ const AdminFrameFormPage = () => {
   if (hasIdParam && !editId) {
     return (
       <div className="admin-page">
-        <Alert>That frame link is not valid.</Alert>
+        <Alert>{INVALID_LINK_MESSAGES.frame}</Alert>
       </div>
     );
   }
@@ -173,9 +155,6 @@ const AdminFrameFormPage = () => {
         title={loadedFrame ? `Edit ${loadedFrame.name}` : "Add a frame"}
         description="Set the frame details, then add each size it's sold in with its own price."
       />
-
-      {notice && <Alert variant="success">{notice}</Alert>}
-      {save.error && <Alert>{save.error}</Alert>}
 
       <form onSubmit={submit} noValidate className="frame-form">
         {/* Locked while saving so nothing typed meanwhile is lost when the saved frame refills the form. */}
@@ -239,7 +218,7 @@ const AdminFrameFormPage = () => {
               >
                 <textarea
                   id="description"
-                  rows={3}
+                  rows={DESCRIPTION_ROWS}
                   value={form.description}
                   onChange={(e) => setField("description", e.target.value)}
                   maxLength={FRAME_FIELD_LIMITS.description}
@@ -267,7 +246,7 @@ const AdminFrameFormPage = () => {
                 className="btn btn-secondary admin-btn"
                 onClick={() => addRow()}
               >
-                <Plus size={16} /> Custom size
+                <Plus size={ICON_SIZE.md} /> Custom size
               </button>
             </div>
 
@@ -339,7 +318,12 @@ const AdminFrameFormPage = () => {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary admin-btn">
-              {saving ? "Saving…" : editId ? "Save changes" : "Create frame"}
+              <ButtonLabel
+                loading={saving}
+                {...(editId
+                  ? BUTTON_LABELS.saveFrame
+                  : BUTTON_LABELS.createFrame)}
+              />
             </button>
           </div>
         </fieldset>

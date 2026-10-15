@@ -4,6 +4,7 @@ import {
   HALF_WIDTH_IMAGE_SIZES,
   IMAGE_SIZES,
 } from "../../constants/home";
+import { ICON_SIZE } from "../../constants/ui";
 
 const GiftSection = () => (
   <section className="split-section split-bg-taupe">
@@ -32,10 +33,10 @@ const GiftSection = () => (
       </p>
       <div className="split-buttons">
         <button className="btn btn-primary btn-ink">
-          Create a Gift Frame <ArrowRight size={16} />
+          Create a Gift Frame <ArrowRight size={ICON_SIZE.md} />
         </button>
         <button className="btn btn-secondary btn-ink-outline">
-          Send a Gift Card <ArrowRight size={16} />
+          Send a Gift Card <ArrowRight size={ICON_SIZE.md} />
         </button>
       </div>
       <p className="gift-note">

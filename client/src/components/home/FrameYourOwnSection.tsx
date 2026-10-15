@@ -6,6 +6,7 @@ import {
 } from "../../constants/home";
 import { HOME_SECTIONS } from "../../constants/navigation";
 import { revealOrder } from "../../utils/motion";
+import { ICON_SIZE } from "../../constants/ui";
 
 const FrameYourOwnSection = () => (
   <section
@@ -48,7 +49,7 @@ const FrameYourOwnSection = () => (
       </div>
 
       <button className="btn btn-primary split-cta">
-        Start Framing <ArrowRight size={16} />
+        Start Framing <ArrowRight size={ICON_SIZE.md} />
       </button>
     </div>
   </section>

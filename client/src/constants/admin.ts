@@ -131,4 +131,5 @@ export const DASHBOARD_STAT_CARDS: readonly DashboardStatCard[] = [
   { key: "frames", label: "Frames", icon: Frame, to: "/admin/frames" },
 ];
 
-export const RECENT_ORDERS_EMPTY_TEXT = "No orders yet.";
+/** Visible lines of the frame description box. */
+export const DESCRIPTION_ROWS = 3;

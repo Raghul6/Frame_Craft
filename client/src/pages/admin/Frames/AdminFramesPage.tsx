@@ -1,24 +1,34 @@
 import { ImageOff, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import AdminPageHeader from "../../../components/admin/AdminPageHeader";
 import ListPanel from "../../../components/admin/ListPanel";
 import ListToolbar from "../../../components/admin/ListToolbar";
-import Alert from "../../../components/common/Alert";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import StatusBadge from "../../../components/common/StatusBadge";
 import { FRAME_STATUS_OPTIONS } from "../../../constants/admin";
+import {
+  EMPTY_VALUE,
+  FRAME_THUMB_SIZE,
+  ICON_SIZE,
+  ROW_REMOVE_ANIMATION_MS,
+} from "../../../constants/ui";
+import { CONFIRM_MESSAGES, EMPTY_MESSAGES } from "../../../constants/messages";
 import {
   selectFrameRemove,
   selectFramesList,
 } from "../../../features/frames/selectors";
+import { frameRemovedFromList } from "../../../features/frames/slice";
 import { deleteFrame, fetchFrames } from "../../../features/frames/thunks";
 import { useAdminList } from "../../../hooks/useAdminList";
 import type { Frame } from "../../../types/admin";
 import { formatPriceRange } from "../../../utils/format";
+import { wait } from "../../../utils/wait";
 import "./AdminFramesPage.css";
 
 const frameMeta = (frame: Frame) =>
-  [frame.material, frame.color].filter(Boolean).join(" · ") || "—";
+  [frame.material, frame.color].filter(Boolean).join(" · ") || EMPTY_VALUE;
 
 const totalStock = (frame: Frame) =>
   frame.sizes.reduce((sum, size) => sum + size.stock, 0);
@@ -32,13 +42,26 @@ const AdminFramesPage = () => {
     filterKey: "status",
   });
 
-  const handleDelete = async (frame: Frame) => {
-    const confirmed = window.confirm(
-      `Delete "${frame.name}" and all its sizes? Past orders keep their copy of the details.`,
-    );
-    if (!confirmed) return;
-    // Refetch so the page refills (or moves back a page if it is now empty).
-    if (await dispatch(deleteFrame(frame.id))) void reload();
+  // The frame waiting for confirmation in the dialog (null = dialog closed).
+  const [pendingDelete, setPendingDelete] = useState<Frame | null>(null);
+  // The row playing its slide-out animation after a delete.
+  const [removingId, setRemovingId] = useState<number | null>(null);
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+    const { id, name } = pendingDelete;
+    // The thunk shows the "deleted" / error toast.
+    const deleted = await dispatch(deleteFrame(id, name));
+    setPendingDelete(null);
+    if (!deleted) return;
+
+    // Let the row slide out, then drop it and refetch so the page refills
+    // (or moves back a page if it is now empty).
+    setRemovingId(id);
+    await wait(ROW_REMOVE_ANIMATION_MS);
+    dispatch(frameRemovedFromList(id));
+    setRemovingId(null);
+    void reload();
   };
 
   return (
@@ -61,12 +84,10 @@ const AdminFramesPage = () => {
         }}
         actions={
           <Link to="/admin/frames/new" className="btn btn-primary admin-btn">
-            <Plus size={16} /> Add frame
+            <Plus size={ICON_SIZE.md} /> Add frame
           </Link>
         }
       />
-
-      {remove.error && <Alert>{remove.error}</Alert>}
 
       <ListPanel
         list={list}
@@ -74,8 +95,8 @@ const AdminFramesPage = () => {
         emptyText={
           <>
             {filters.search || filters.filter
-              ? "No frames match these filters."
-              : "No frames yet."}{" "}
+              ? EMPTY_MESSAGES.framesFiltered
+              : EMPTY_MESSAGES.framesNone}{" "}
             <Link to="/admin/frames/new">Add the first one</Link>
           </>
         }
@@ -94,22 +115,27 @@ const AdminFramesPage = () => {
             </thead>
             <tbody>
               {list.items.map((frame) => (
-                <tr key={frame.id}>
+                <tr
+                  key={frame.id}
+                  className={
+                    removingId === frame.id ? "row-removing" : undefined
+                  }
+                >
                   <td data-label="Frame">
                     <div className="frame-cell">
                       {frame.imageUrl ? (
                         <img
                           src={frame.imageUrl}
                           alt=""
-                          width={44}
-                          height={44}
+                          width={FRAME_THUMB_SIZE}
+                          height={FRAME_THUMB_SIZE}
                           loading="lazy"
                           decoding="async"
                           referrerPolicy="no-referrer"
                         />
                       ) : (
                         <span className="frame-thumb-empty">
-                          <ImageOff size={16} />
+                          <ImageOff size={ICON_SIZE.md} />
                         </span>
                       )}
                       <div>
@@ -148,16 +174,16 @@ const AdminFramesPage = () => {
                         className="icon-action"
                         aria-label={`Edit ${frame.name}`}
                       >
-                        <Pencil size={15} />
+                        <Pencil size={ICON_SIZE.action} />
                       </Link>
                       <button
                         type="button"
                         className="icon-action danger"
-                        onClick={() => handleDelete(frame)}
+                        onClick={() => setPendingDelete(frame)}
                         disabled={remove.id === frame.id}
                         aria-label={`Delete ${frame.name}`}
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={ICON_SIZE.action} />
                       </button>
                     </div>
                   </td>
@@ -167,6 +193,15 @@ const AdminFramesPage = () => {
           </table>
         </div>
       </ListPanel>
+
+      <ConfirmDialog
+        open={pendingDelete !== null}
+        {...CONFIRM_MESSAGES.deleteFrame(pendingDelete?.name ?? "")}
+        danger
+        busy={remove.id !== null}
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDelete(null)}
+      />
     </div>
   );
 };

@@ -3,13 +3,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import AdminPageHeader from "../../../components/admin/AdminPageHeader";
+import DashboardSkeleton from "../../../components/admin/DashboardSkeleton";
 import OrdersTable from "../../../components/admin/OrdersTable";
 import Alert from "../../../components/common/Alert";
-import Spinner from "../../../components/common/Spinner";
-import {
-  DASHBOARD_STAT_CARDS,
-  RECENT_ORDERS_EMPTY_TEXT,
-} from "../../../constants/admin";
+import { DASHBOARD_STAT_CARDS } from "../../../constants/admin";
 import {
   selectDashboardError,
   selectDashboardStats,
@@ -18,6 +15,8 @@ import {
 import { fetchDashboard } from "../../../features/dashboard/thunks";
 import { formatMoney } from "../../../utils/format";
 import "./AdminDashboardPage.css";
+import { ICON_SIZE } from "../../../constants/ui";
+import { EMPTY_MESSAGES } from "../../../constants/messages";
 
 const AdminDashboardPage = () => {
   const dispatch = useAppDispatch();
@@ -36,13 +35,13 @@ const AdminDashboardPage = () => {
         description="An overview of the store."
         actions={
           <Link to="/admin/frames/new" className="btn btn-primary admin-btn">
-            <Plus size={16} /> Add frame
+            <Plus size={ICON_SIZE.md} /> Add frame
           </Link>
         }
       />
 
       {status === "failed" && error && <Alert>{error}</Alert>}
-      {!stats && status !== "failed" && <Spinner full />}
+      {!stats && status !== "failed" && <DashboardSkeleton />}
 
       {stats && (
         <>
@@ -51,7 +50,7 @@ const AdminDashboardPage = () => {
               ({ key, label, icon: Icon, to, money }) => (
                 <Link key={key} to={to} className="stat-card">
                   <span className="stat-icon">
-                    <Icon size={18} />
+                    <Icon size={ICON_SIZE.lg} />
                   </span>
                   <span className="stat-label">{label}</span>
                   <span className="stat-value">
@@ -69,7 +68,7 @@ const AdminDashboardPage = () => {
             </div>
             <OrdersTable
               orders={stats.recentOrders}
-              emptyText={RECENT_ORDERS_EMPTY_TEXT}
+              emptyText={EMPTY_MESSAGES.ordersNone}
             />
           </section>
         </>
