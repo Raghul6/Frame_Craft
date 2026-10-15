@@ -8,8 +8,8 @@ import PasswordInput from "../../components/common/PasswordInput";
 import { login } from "../../features/auth/thunks";
 import { useAuth } from "../../hooks/useAuth";
 import { useClearAuthErrors } from "../../hooks/useClearAuthErrors";
-import { preloadRegister } from "../../routes/lazyPages";
-import { getPostLoginPath, PATHS } from "../../routes/paths";
+import { preloadRegister } from "../../routes/routes";
+import { getPostLoginPath } from "../../utils/redirect";
 import type { RedirectState } from "../../types/auth";
 import type { LoginFormErrors } from "../../types/forms";
 import "../../styles/auth.css";
@@ -91,7 +91,7 @@ const LoginPage = () => {
         <p className="auth-switch">
           New to FrameCraft?{" "}
           <Link
-            to={PATHS.register}
+            to="/register"
             onMouseEnter={preloadRegister}
             onFocus={preloadRegister}
           >

@@ -12,8 +12,7 @@ import { STORE_NAV_LINKS } from "../../constants/navigation";
 import { BRAND_NAME, LOGO, NAV_DESKTOP_MEDIA_QUERY } from "../../constants/ui";
 import { logout } from "../../features/auth/thunks";
 import { useAuth } from "../../hooks/useAuth";
-import { preloadAdmin, preloadLogin } from "../../routes/lazyPages";
-import { PATHS } from "../../routes/paths";
+import { preloadAdmin, preloadLogin } from "../../routes/routes";
 import { reportError } from "../../utils/errors";
 
 const Navbar = () => {
@@ -58,7 +57,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link to={PATHS.home} className="nav-logo" onClick={closeMenu}>
+      <Link to="/" className="nav-logo" onClick={closeMenu}>
         <img
           src={LOGO.src}
           srcSet={LOGO.srcSet}
@@ -96,7 +95,7 @@ const Navbar = () => {
             <div className="nav-user">
               {isAdmin && (
                 <Link
-                  to={PATHS.admin.root}
+                  to="/admin"
                   className="nav-admin-link"
                   onClick={closeMenu}
                   onMouseEnter={preloadAdmin}
@@ -118,7 +117,7 @@ const Navbar = () => {
             </div>
           ) : (
             <NavLink
-              to={PATHS.login}
+              to="/login"
               className="nav-login-btn"
               onClick={closeMenu}
               onMouseEnter={preloadLogin}

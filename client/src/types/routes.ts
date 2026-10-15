@@ -1,12 +1,13 @@
-import type { ComponentType, LazyExoticComponent, ReactNode } from "react";
+import type { ComponentType, LazyExoticComponent } from "react";
 import type { UserRole } from "./auth";
 
-export interface RouteConfig {
-  path?: string;
-  index?: boolean;
-  element: ReactNode;
-  /** Empty = any signed-in user. */
-  requiredRoles: UserRole[];
+/** One protected page in routes/routes.ts (Symphony-style route config). */
+export interface AppRoute {
+  path: string;
+  name: string;
+  /** Roles allowed to open the page. */
+  roles: readonly UserRole[];
+  component: ComponentType;
 }
 
 export type PreloadableComponent<P extends object> = LazyExoticComponent<

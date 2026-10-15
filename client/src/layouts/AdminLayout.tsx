@@ -9,7 +9,6 @@ import { ADMIN_NAV } from "../constants/admin";
 import { BRAND_NAME, LOGO } from "../constants/ui";
 import { logout } from "../features/auth/thunks";
 import { useAuth } from "../hooks/useAuth";
-import { PATHS } from "../routes/paths";
 import "../styles/admin.css";
 
 const AdminLayout = () => {
@@ -21,14 +20,14 @@ const AdminLayout = () => {
   return (
     <div className="admin-shell">
       <header className="admin-topbar">
-        <Link to={PATHS.admin.root} className="admin-brand">
+        <Link to="/admin" className="admin-brand">
           <img src={LOGO.src} alt="" width={40} height={40} />
           <span>
             {BRAND_NAME} <small>Admin</small>
           </span>
         </Link>
         <div className="admin-topbar-actions">
-          <Link to={PATHS.home} className="admin-topbar-link">
+          <Link to="/" className="admin-topbar-link">
             <Store size={16} /> <span>View store</span>
           </Link>
           <span className="admin-topbar-user" title={user?.username}>

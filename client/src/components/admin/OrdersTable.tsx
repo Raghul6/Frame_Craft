@@ -1,5 +1,4 @@
 import { Link, useNavigate } from "react-router-dom";
-import { PATHS } from "../../routes/paths";
 import type { OrdersTableProps } from "../../types/components";
 import { formatDateTime, formatMoney } from "../../utils/format";
 import StatusBadge from "../common/StatusBadge";
@@ -30,11 +29,11 @@ const OrdersTable = ({ orders, emptyText, hideCustomer }: OrdersTableProps) => {
             <tr
               key={o.id}
               className="clickable"
-              onClick={() => navigate(PATHS.admin.orderDetail(o.id))}
+              onClick={() => navigate(`/admin/orders/${o.id}`)}
             >
               <td data-label="Order" className="cell-strong">
                 <Link
-                  to={PATHS.admin.orderDetail(o.id)}
+                  to={`/admin/orders/${o.id}`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   #{o.id}

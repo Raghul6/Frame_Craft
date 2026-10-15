@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Spinner from "../components/common/Spinner";
 import { useAuth } from "../hooks/useAuth";
 import type { RedirectState } from "../types/auth";
-import { getPostLoginPath } from "./paths";
+import { getPostLoginPath } from "../utils/redirect";
 
 /** Login/register pages: send logged-in users on — admins to /admin, customers back where they came from. */
 const GuestRoute = () => {

@@ -1,5 +1,4 @@
 import { Component, type ErrorInfo } from "react";
-import { PATHS } from "../../routes/paths";
 import type {
   ErrorBoundaryProps,
   ErrorBoundaryState,
@@ -50,7 +49,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             Try again
           </button>
           {/* A plain link (not <Link>) because this boundary may sit outside the router. */}
-          <a href={PATHS.home} className="btn btn-secondary">
+          <a href="/" className="btn btn-secondary">
             Go home
           </a>
         </div>

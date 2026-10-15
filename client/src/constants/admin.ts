@@ -12,7 +12,6 @@ import type {
   FilterOption,
   SizePreset,
 } from "../types/admin";
-import { PATHS } from "../routes/paths";
 import { capitalize } from "../utils/text";
 
 // Keep in sync with server/src/constants/admin.ts.
@@ -42,14 +41,14 @@ export const SIZE_LABEL_PLACEHOLDER = "Label";
 
 export const ADMIN_NAV: readonly AdminNavItem[] = [
   {
-    to: PATHS.admin.root,
+    to: "/admin",
     label: "Dashboard",
     icon: LayoutDashboard,
     end: true,
   },
-  { to: PATHS.admin.orders, label: "Orders", icon: ShoppingBag, end: false },
-  { to: PATHS.admin.frames, label: "Frames", icon: Frame, end: false },
-  { to: PATHS.admin.users, label: "Users", icon: Users, end: false },
+  { to: "/admin/orders", label: "Orders", icon: ShoppingBag, end: false },
+  { to: "/admin/frames", label: "Frames", icon: Frame, end: false },
+  { to: "/admin/users", label: "Users", icon: Users, end: false },
 ];
 
 export const ORDER_STATUS_OPTIONS: readonly FilterOption[] = ORDER_STATUSES.map(
@@ -113,23 +112,23 @@ export const DASHBOARD_STAT_CARDS: readonly DashboardStatCard[] = [
     key: "revenue",
     label: "Revenue",
     icon: DollarSign,
-    to: PATHS.admin.orders,
+    to: "/admin/orders",
     money: true,
   },
-  { key: "orders", label: "Orders", icon: ShoppingBag, to: PATHS.admin.orders },
+  { key: "orders", label: "Orders", icon: ShoppingBag, to: "/admin/orders" },
   {
     key: "pendingOrders",
     label: "Pending orders",
     icon: Clock,
-    to: `${PATHS.admin.orders}?status=pending`,
+    to: "/admin/orders?status=pending",
   },
   {
     key: "customers",
     label: "Customers",
     icon: Users,
-    to: `${PATHS.admin.users}?role=customer`,
+    to: "/admin/users?role=customer",
   },
-  { key: "frames", label: "Frames", icon: Frame, to: PATHS.admin.frames },
+  { key: "frames", label: "Frames", icon: Frame, to: "/admin/frames" },
 ];
 
 export const RECENT_ORDERS_EMPTY_TEXT = "No orders yet.";

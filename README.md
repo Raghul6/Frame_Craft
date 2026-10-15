@@ -23,10 +23,10 @@ client/src/                  # Frontend (React + Redux Toolkit, structure follow
   pages/        one folder per page, holding that page's .tsx and .css
     Home/  Login/  Register/
     admin/Dashboard/  Orders/  OrderDetail/  Frames/  FrameForm/  Users/  UserDetail/
-  routes/       paths.ts (PATHS), AppRoutes, generateRoutes, lazyPages, ProtectedRoute, RoleBasedRoute, GuestRoute
+  routes/       routes.ts (route list + lazy pages), AppRoutes, ProtectedRoutes, GuestRoute  ← Symphony-style
   styles/       forms.css (global), auth.css, admin.css
   types/        api, auth, admin, state, forms, components, hooks, home, routes, store  ← every type lives here
-  utils/        apiError, errors, format, frameForm, passwordStrength, text, validators
+  utils/        apiError, errors, format, frameForm, lazyWithPreload, motion, passwordStrength, redirect, text, validators
 
 server/                      # Backend (Express 5 + pg + JWT, TypeScript)
   src/
@@ -46,9 +46,10 @@ server/                      # Backend (Express 5 + pg + JWT, TypeScript)
 Client code conventions:
 - Redux: `features/<domain>/slice.ts` (start/success/fail reducers), `thunks.ts` (hand-rolled `(payload) => async (dispatch) => {}` thunks with try/catch and `extractError`), `selectors.ts`. List fetches abort the previous request (`features/shared/latestRequest.ts`).
 - Components: arrow functions with `export default` at the bottom; props types in `types/components.ts`.
-- No inline `style={{…}}` (use CSS classes); constants only in `constants/` (routes in `routes/paths.ts`); type/interface declarations only in `types/`; nothing directly inside `pages/`.
+- Routes follow the Symphony pattern: every protected page is one object in `routes/routes.ts` — `{ path: "/admin/orders", name: "Orders", roles: ["admin"], component: AdminOrders }` — and `AppRoutes` maps them through `ProtectedRoutes` (signed-out → /login, wrong role → home, `name` → tab title). Paths are plain strings, as in Symphony; to add a page, add one object to the array.
+- No inline `style={{…}}` (use CSS classes); constants only in `constants/`; type/interface declarations only in `types/`; nothing directly inside `pages/`.
 - Performance / lazy loading:
-  - Every route except Home is code-split (`routes/lazyPages.ts`); Login/Register/Admin chunks are preloaded on hover/focus, and the admin shell on idle once an admin is signed in.
+  - Every route except Home is code-split (lazy pages declared at the top of `routes/routes.ts`); Login/Register/Admin chunks are preloaded on hover/focus, and the admin shell on idle once an admin is signed in.
   - Home renders the hero immediately; everything below it is one lazy chunk (`components/home/BelowTheFold.tsx`) with `content-visibility: auto`.
   - Images: lazy below the fold, responsive `srcset` for large photos, explicit width/height. The logo is `public/logo-170.webp` / `logo-340.webp` (13–37 kB).
   - Libraries are split into stable `vendor-*` chunks (`vite.config.ts`) so app-only deploys keep them cached.

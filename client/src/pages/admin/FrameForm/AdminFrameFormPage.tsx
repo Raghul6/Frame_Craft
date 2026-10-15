@@ -18,7 +18,6 @@ import {
 import { frameSaveErrorsCleared } from "../../../features/frames/slice";
 import { fetchFrame, saveFrame } from "../../../features/frames/thunks";
 import { useRouteId } from "../../../hooks/useRouteId";
-import { PATHS } from "../../../routes/paths";
 import type { SizePreset } from "../../../types/admin";
 import type { FieldErrors } from "../../../types/api";
 import type {
@@ -144,7 +143,7 @@ const AdminFrameFormPage = () => {
       setNotice("Changes saved.");
     } else {
       const state: FrameFormLocationState = { created: true };
-      navigate(PATHS.admin.editFrame(frame.id), { replace: true, state });
+      navigate(`/admin/frames/${frame.id}`, { replace: true, state });
     }
   };
 
@@ -164,7 +163,7 @@ const AdminFrameFormPage = () => {
 
   return (
     <DetailShell
-      backTo={PATHS.admin.frames}
+      backTo="/admin/frames"
       backLabel="All frames"
       status={editId ? current.status : "succeeded"}
       error={current.error}
@@ -335,7 +334,7 @@ const AdminFrameFormPage = () => {
             <button
               type="button"
               className="btn btn-secondary admin-btn"
-              onClick={() => navigate(PATHS.admin.frames)}
+              onClick={() => navigate("/admin/frames")}
             >
               Cancel
             </button>

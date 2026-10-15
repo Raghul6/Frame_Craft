@@ -7,7 +7,6 @@ import { ROLE_FILTER_OPTIONS } from "../../../constants/admin";
 import { selectUsersList } from "../../../features/users/selectors";
 import { fetchUsers } from "../../../features/users/thunks";
 import { useAdminList } from "../../../hooks/useAdminList";
-import { PATHS } from "../../../routes/paths";
 import { formatDate, formatMoney } from "../../../utils/format";
 
 const AdminUsersPage = () => {
@@ -60,11 +59,11 @@ const AdminUsersPage = () => {
                 <tr
                   key={u.id}
                   className="clickable"
-                  onClick={() => navigate(PATHS.admin.userDetail(u.id))}
+                  onClick={() => navigate(`/admin/users/${u.id}`)}
                 >
                   <td data-label="User" className="cell-strong">
                     <Link
-                      to={PATHS.admin.userDetail(u.id)}
+                      to={`/admin/users/${u.id}`}
                       onClick={(e) => e.stopPropagation()}
                     >
                       {u.username}

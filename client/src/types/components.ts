@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { ComponentType, InputHTMLAttributes, ReactNode } from "react";
 import type { FilterOption, OrderSummary } from "./admin";
 import type { SizeRow } from "./forms";
 import type { ListState, RequestStatus } from "./api";
@@ -115,11 +115,9 @@ export interface SizeRowEditorProps {
 
 // ---------- routes ----------
 
-export interface ProtectedRouteProps {
-  roles?: UserRole[];
-}
-
-export interface RoleBasedRouteProps {
-  requiredRoles: UserRole[];
-  children: ReactNode;
+export interface ProtectedRoutesProps {
+  component: ComponentType;
+  roles: readonly UserRole[];
+  /** Page name → browser tab title. Omitted on layout routes, so the page's own name wins. */
+  name?: string;
 }

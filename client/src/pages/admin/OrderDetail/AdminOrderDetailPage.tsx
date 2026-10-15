@@ -12,7 +12,6 @@ import {
 } from "../../../features/orders/selectors";
 import { changeOrderStatus, fetchOrder } from "../../../features/orders/thunks";
 import { useRouteId } from "../../../hooks/useRouteId";
-import { PATHS } from "../../../routes/paths";
 import type { OrderStatus } from "../../../types/admin";
 import type { OrderStatusDraft } from "../../../types/forms";
 import { formatDateTime, formatMoney } from "../../../utils/format";
@@ -57,7 +56,7 @@ const AdminOrderDetailPage = () => {
 
   return (
     <DetailShell
-      backTo={PATHS.admin.orders}
+      backTo="/admin/orders"
       backLabel="All orders"
       status={status}
       error={error}
@@ -109,7 +108,7 @@ const AdminOrderDetailPage = () => {
               <dl className="detail-list">
                 <dt>Username</dt>
                 <dd>
-                  <Link to={PATHS.admin.userDetail(current.customer.id)}>
+                  <Link to={`/admin/users/${current.customer.id}`}>
                     {current.customer.username}
                   </Link>
                 </dd>
@@ -153,7 +152,7 @@ const AdminOrderDetailPage = () => {
                       <tr key={item.id}>
                         <td data-label="Frame" className="cell-strong">
                           {item.frameId ? (
-                            <Link to={PATHS.admin.editFrame(item.frameId)}>
+                            <Link to={`/admin/frames/${item.frameId}`}>
                               {item.frameName}
                             </Link>
                           ) : (

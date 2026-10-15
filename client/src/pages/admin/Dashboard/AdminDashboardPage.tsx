@@ -16,7 +16,6 @@ import {
   selectDashboardStatus,
 } from "../../../features/dashboard/selectors";
 import { fetchDashboard } from "../../../features/dashboard/thunks";
-import { PATHS } from "../../../routes/paths";
 import { formatMoney } from "../../../utils/format";
 import "./AdminDashboardPage.css";
 
@@ -36,7 +35,7 @@ const AdminDashboardPage = () => {
         title="Dashboard"
         description="An overview of the store."
         actions={
-          <Link to={PATHS.admin.newFrame} className="btn btn-primary admin-btn">
+          <Link to="/admin/frames/new" className="btn btn-primary admin-btn">
             <Plus size={16} /> Add frame
           </Link>
         }
@@ -66,7 +65,7 @@ const AdminDashboardPage = () => {
           <section className="admin-panel">
             <div className="admin-panel-header">
               <h2>Recent orders</h2>
-              <Link to={PATHS.admin.orders}>View all</Link>
+              <Link to="/admin/orders">View all</Link>
             </div>
             <OrdersTable
               orders={stats.recentOrders}

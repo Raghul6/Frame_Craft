@@ -15,8 +15,7 @@ import {
 import { register } from "../../features/auth/thunks";
 import { useAuth } from "../../hooks/useAuth";
 import { useClearAuthErrors } from "../../hooks/useClearAuthErrors";
-import { preloadLogin } from "../../routes/lazyPages";
-import { PATHS } from "../../routes/paths";
+import { preloadLogin } from "../../routes/routes";
 import type { ContactType } from "../../types/auth";
 import type { RegisterFormErrors } from "../../types/forms";
 import {
@@ -88,7 +87,7 @@ const RegisterPage = () => {
         password,
       }),
     );
-    if (user) navigate(PATHS.home, { replace: true });
+    if (user) navigate("/", { replace: true });
   };
 
   const err = (field: keyof RegisterFormErrors) =>
@@ -201,11 +200,7 @@ const RegisterPage = () => {
 
         <p className="auth-switch">
           Already have an account?{" "}
-          <Link
-            to={PATHS.login}
-            onMouseEnter={preloadLogin}
-            onFocus={preloadLogin}
-          >
+          <Link to="/login" onMouseEnter={preloadLogin} onFocus={preloadLogin}>
             Log in
           </Link>
         </p>

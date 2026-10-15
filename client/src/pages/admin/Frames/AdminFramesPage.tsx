@@ -13,7 +13,6 @@ import {
 } from "../../../features/frames/selectors";
 import { deleteFrame, fetchFrames } from "../../../features/frames/thunks";
 import { useAdminList } from "../../../hooks/useAdminList";
-import { PATHS } from "../../../routes/paths";
 import type { Frame } from "../../../types/admin";
 import { formatPriceRange } from "../../../utils/format";
 import "./AdminFramesPage.css";
@@ -61,7 +60,7 @@ const AdminFramesPage = () => {
           options: FRAME_STATUS_OPTIONS,
         }}
         actions={
-          <Link to={PATHS.admin.newFrame} className="btn btn-primary admin-btn">
+          <Link to="/admin/frames/new" className="btn btn-primary admin-btn">
             <Plus size={16} /> Add frame
           </Link>
         }
@@ -77,7 +76,7 @@ const AdminFramesPage = () => {
             {filters.search || filters.filter
               ? "No frames match these filters."
               : "No frames yet."}{" "}
-            <Link to={PATHS.admin.newFrame}>Add the first one</Link>
+            <Link to="/admin/frames/new">Add the first one</Link>
           </>
         }
       >
@@ -115,7 +114,7 @@ const AdminFramesPage = () => {
                       )}
                       <div>
                         <Link
-                          to={PATHS.admin.editFrame(frame.id)}
+                          to={`/admin/frames/${frame.id}`}
                           className="cell-strong"
                         >
                           {frame.name}
@@ -145,7 +144,7 @@ const AdminFramesPage = () => {
                   <td data-label="Actions" className="num">
                     <div className="row-actions">
                       <Link
-                        to={PATHS.admin.editFrame(frame.id)}
+                        to={`/admin/frames/${frame.id}`}
                         className="icon-action"
                         aria-label={`Edit ${frame.name}`}
                       >

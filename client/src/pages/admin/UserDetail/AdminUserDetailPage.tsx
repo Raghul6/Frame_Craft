@@ -9,7 +9,6 @@ import StatusBadge from "../../../components/common/StatusBadge";
 import { selectUserDetail } from "../../../features/users/selectors";
 import { fetchUserDetail } from "../../../features/users/thunks";
 import { useRouteId } from "../../../hooks/useRouteId";
-import { PATHS } from "../../../routes/paths";
 import type { OrderPaging } from "../../../types/forms";
 import { formatDateTime, formatMoney } from "../../../utils/format";
 
@@ -35,7 +34,7 @@ const AdminUserDetailPage = () => {
 
   return (
     <DetailShell
-      backTo={PATHS.admin.users}
+      backTo="/admin/users"
       backLabel="All users"
       status={status}
       error={error}

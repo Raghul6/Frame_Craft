@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useAppDispatch } from "./app/hooks";
 import { bootstrapAuth } from "./features/auth/thunks";
 import { useAuth } from "./hooks/useAuth";
-import { preloadAdmin } from "./routes/lazyPages";
+import { preloadAdmin } from "./routes/routes";
 import AppRoutes from "./routes/AppRoutes";
 import { whenIdle } from "./utils/lazyWithPreload";
 

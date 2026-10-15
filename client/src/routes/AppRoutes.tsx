@@ -4,57 +4,47 @@ import Spinner from "../components/common/Spinner";
 import MainLayout from "../layouts/MainLayout";
 // Home (the landing page) stays in the main bundle; everything else is code-split.
 import HomePage from "../pages/Home/HomePage";
-import type { RouteConfig } from "../types/routes";
-import { generateAdminRoutes } from "./generateRoutes";
 import GuestRoute from "./GuestRoute";
-import { AdminLayout, LoginPage, RegisterPage } from "./lazyPages";
-import { PATHS } from "./paths";
-import ProtectedRoute from "./ProtectedRoute";
-import RoleBasedRoute from "./RoleBasedRoute";
-
-const routeFallback = <Spinner full />;
-
-const renderGuardedRoutes = (routes: RouteConfig[]) =>
-  routes.map((route) => (
-    <Route
-      key={route.path ?? "index"}
-      index={route.index}
-      path={route.path}
-      element={
-        <RoleBasedRoute requiredRoles={route.requiredRoles}>
-          {route.element}
-        </RoleBasedRoute>
-      }
-    />
-  ));
+import ProtectedRoutes from "./ProtectedRoutes";
+import routes, { AdminLayout, LoginPage, RegisterPage } from "./routes";
 
 // MainLayout and AdminLayout each wrap their <Outlet /> in Suspense, so this outer
 // boundary only shows while a lazy layout itself loads.
 const AppRoutes = () => (
-  <Suspense fallback={routeFallback}>
+  <Suspense fallback={<Spinner full />}>
     <Routes>
       <Route element={<MainLayout />}>
-        {/* Public — no login required */}
-        <Route index element={<HomePage />} />
-
-        {/* One login page for everyone; admins are sent to /admin by role */}
+        <Route path="/" element={<HomePage />} />
+        {/* Logged-in users are sent on from these (admins → /admin). */}
         <Route element={<GuestRoute />}>
-          <Route path={PATHS.login} element={<LoginPage />} />
-          <Route path={PATHS.register} element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
       </Route>
 
-      <Route element={<ProtectedRoute roles={["admin"]} />}>
-        <Route path={PATHS.admin.root} element={<AdminLayout />}>
-          {renderGuardedRoutes(generateAdminRoutes())}
+      <Route
+        path="/admin"
+        element={<ProtectedRoutes component={AdminLayout} roles={["admin"]} />}
+      >
+        {routes.map(({ component, path, roles, name }) => (
           <Route
-            path="*"
-            element={<Navigate to={PATHS.admin.root} replace />}
+            key={path}
+            path={path}
+            // Keyed by path so e.g. "Add Frame" → "Edit Frame" mounts a fresh form.
+            element={
+              <ProtectedRoutes
+                key={path}
+                component={component}
+                roles={roles}
+                name={name}
+              />
+            }
           />
-        </Route>
+        ))}
+        <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
       </Route>
 
-      <Route path="*" element={<Navigate to={PATHS.home} replace />} />
+      <Route path="/*" element={<Navigate to="/" replace />} />
     </Routes>
   </Suspense>
 );
