@@ -24,6 +24,9 @@ import {
   validateUsername,
 } from "../../utils/validators";
 import "../../styles/auth.css";
+import ButtonLabel from "../../components/common/ButtonLabel";
+import { BUTTON_LABELS, VALIDATION_MESSAGES } from "../../constants/messages";
+import { BRAND_NAME } from "../../constants/ui";
 
 const validate = (
   username: string,
@@ -36,13 +39,14 @@ const validate = (
     username: validateUsername(username),
     contact: validateContact(contactType, contact),
   };
-  if (!password) errors.password = "Password is required";
+  if (!password) errors.password = VALIDATION_MESSAGES.passwordRequired;
   else if (!isStrongPassword(password)) {
-    errors.password = "Password does not meet all the requirements below";
+    errors.password = VALIDATION_MESSAGES.passwordWeak;
   }
-  if (!confirmPassword) errors.confirmPassword = "Please confirm your password";
+  if (!confirmPassword)
+    errors.confirmPassword = VALIDATION_MESSAGES.confirmPasswordRequired;
   else if (confirmPassword !== password) {
-    errors.confirmPassword = "Passwords do not match";
+    errors.confirmPassword = VALIDATION_MESSAGES.passwordsMismatch;
   }
   return errors;
 };
@@ -99,7 +103,7 @@ const RegisterPage = () => {
   return (
     <section className="auth-page">
       <div className="auth-card">
-        <span className="hero-subtitle">— Join FrameCraft</span>
+        <span className="hero-subtitle">— Join {BRAND_NAME}</span>
         <h2>Create your account</h2>
         <p className="auth-intro">
           A customer account lets you save designs, track orders and check out
@@ -127,14 +131,20 @@ const RegisterPage = () => {
           </FormField>
 
           <div className="form-field">
-            <span className="field-label">Sign up with</span>
-            <div className="segmented" role="tablist">
+            <span className="field-label" id="contact-type-label">
+              Sign up with
+            </span>
+            <div
+              className="segmented"
+              role="radiogroup"
+              aria-labelledby="contact-type-label"
+            >
               {CONTACT_TYPES.map((type) => (
                 <button
                   key={type}
                   type="button"
-                  role="tab"
-                  aria-selected={contactType === type}
+                  role="radio"
+                  aria-checked={contactType === type}
                   className={contactType === type ? "active" : ""}
                   onClick={() => switchContactType(type)}
                 >
@@ -194,7 +204,7 @@ const RegisterPage = () => {
             className="btn btn-primary auth-submit"
             disabled={loading}
           >
-            {loading ? "Creating account…" : "Create account"}
+            <ButtonLabel loading={loading} {...BUTTON_LABELS.register} />
           </button>
         </form>
 

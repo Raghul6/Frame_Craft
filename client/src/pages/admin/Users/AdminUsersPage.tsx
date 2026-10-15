@@ -8,6 +8,8 @@ import { selectUsersList } from "../../../features/users/selectors";
 import { fetchUsers } from "../../../features/users/thunks";
 import { useAdminList } from "../../../hooks/useAdminList";
 import { formatDate, formatMoney } from "../../../utils/format";
+import { EMPTY_MESSAGES } from "../../../constants/messages";
+import { EMPTY_VALUE } from "../../../constants/ui";
 
 const AdminUsersPage = () => {
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const AdminUsersPage = () => {
       <ListPanel
         list={list}
         onPageChange={filters.setPage}
-        emptyText="No users match these filters."
+        emptyText={EMPTY_MESSAGES.usersFiltered}
       >
         <div className="admin-table-wrap">
           <table className="admin-table">
@@ -69,7 +71,9 @@ const AdminUsersPage = () => {
                       {u.username}
                     </Link>
                   </td>
-                  <td data-label="Contact">{u.email ?? u.mobile ?? "—"}</td>
+                  <td data-label="Contact">
+                    {u.email ?? u.mobile ?? EMPTY_VALUE}
+                  </td>
                   <td data-label="Role">
                     <StatusBadge value={u.role} />
                   </td>

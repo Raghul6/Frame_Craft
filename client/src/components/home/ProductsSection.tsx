@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { IMAGE_SIZES, PRODUCTS } from "../../constants/home";
 import { HOME_SECTIONS } from "../../constants/navigation";
 import { revealOrder } from "../../utils/motion";
+import { ICON_SIZE } from "../../constants/ui";
 
 const ProductsSection = () => (
   <section id={HOME_SECTIONS.products} className="container py-2xl most-loved">
@@ -15,7 +16,7 @@ const ProductsSection = () => (
         </p>
       </div>
       <button className="btn btn-secondary btn-compact">
-        Shop all frames <ArrowRight size={16} />
+        Shop all frames <ArrowRight size={ICON_SIZE.md} />
       </button>
     </div>
 

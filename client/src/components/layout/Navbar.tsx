@@ -9,7 +9,12 @@ import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
 import { STORE_NAV_LINKS } from "../../constants/navigation";
-import { BRAND_NAME, LOGO, NAV_DESKTOP_MEDIA_QUERY } from "../../constants/ui";
+import {
+  BRAND_NAME,
+  ICON_SIZE,
+  LOGO,
+  NAV_DESKTOP_MEDIA_QUERY,
+} from "../../constants/ui";
 import { logout } from "../../features/auth/thunks";
 import { useAuth } from "../../hooks/useAuth";
 import { preloadAdmin, preloadLogin } from "../../routes/routes";
@@ -77,7 +82,11 @@ const Navbar = () => {
         aria-expanded={menuOpen}
         aria-controls="primary-navigation"
       >
-        {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        {menuOpen ? (
+          <X size={ICON_SIZE.menu} />
+        ) : (
+          <Menu size={ICON_SIZE.menu} />
+        )}
       </button>
 
       <div
@@ -101,18 +110,18 @@ const Navbar = () => {
                   onMouseEnter={preloadAdmin}
                   onFocus={preloadAdmin}
                 >
-                  <LayoutDashboard size={14} /> Admin panel
+                  <LayoutDashboard size={ICON_SIZE.sm} /> Admin panel
                 </Link>
               )}
               <span className="nav-username">
-                <UserIcon size={14} /> {user.username}
+                <UserIcon size={ICON_SIZE.sm} /> {user.username}
               </span>
               <button
                 type="button"
                 className="nav-logout"
                 onClick={handleLogout}
               >
-                <LogOut size={14} /> Logout
+                <LogOut size={ICON_SIZE.sm} /> Logout
               </button>
             </div>
           ) : (

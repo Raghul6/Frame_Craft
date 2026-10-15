@@ -5,6 +5,7 @@ import type { DashboardStats } from "../../types/admin";
 import { extractError, isAbortError } from "../../utils/apiError";
 import { createLatestRequest } from "../shared/latestRequest";
 import { dashboardFail, dashboardStart, dashboardSuccess } from "./slice";
+import { LOAD_ERROR_MESSAGES } from "../../constants/messages";
 
 const dashboardRequest = createLatestRequest();
 
@@ -20,9 +21,7 @@ export const fetchDashboard = () => async (dispatch: Dispatch) => {
     return response.data;
   } catch (error) {
     if (isAbortError(error)) return;
-    dispatch(
-      dashboardFail(extractError(error, "Could not load the dashboard")),
-    );
+    dispatch(dashboardFail(extractError(error, LOAD_ERROR_MESSAGES.dashboard)));
   } finally {
     dashboardRequest.finish(controller);
   }

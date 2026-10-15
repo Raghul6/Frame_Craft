@@ -1,6 +1,7 @@
 import { Search, X } from "lucide-react";
 import type { FormEvent } from "react";
 import type { ListToolbarProps } from "../../types/components";
+import { ICON_SIZE, SEARCH_MAX_LENGTH } from "../../constants/ui";
 
 /** Search box (debounced by the page's useListFilters) + one filter + optional actions. */
 const ListToolbar = ({
@@ -19,7 +20,7 @@ const ListToolbar = ({
   return (
     <div className="admin-toolbar">
       <form className="admin-search" onSubmit={submit} role="search">
-        <Search size={16} aria-hidden />
+        <Search size={ICON_SIZE.md} aria-hidden />
         <input
           type="text"
           inputMode="search"
@@ -27,7 +28,7 @@ const ListToolbar = ({
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
           aria-label={searchPlaceholder}
-          maxLength={100}
+          maxLength={SEARCH_MAX_LENGTH}
         />
         {searchValue && (
           <button
@@ -36,7 +37,7 @@ const ListToolbar = ({
             onClick={() => onSearchChange("")}
             aria-label="Clear search"
           >
-            <X size={16} />
+            <X size={ICON_SIZE.md} />
           </button>
         )}
       </form>

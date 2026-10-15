@@ -1,8 +1,9 @@
 import type { UserRole } from "../types/auth";
+import { SAFE_INTERNAL_PATH_REGEX } from "../constants/auth";
 
-/** Only same-app paths ("/x"), never "//evil.com" or "https://…" — blocks open redirects. */
+/** Only same-app paths ("/x"), never "//evil.com", "/\\evil.com" or "https://…" — blocks open redirects. */
 const isSafeInternalPath = (path: unknown): path is string =>
-  typeof path === "string" && /^\/(?!\/)/.test(path);
+  typeof path === "string" && SAFE_INTERNAL_PATH_REGEX.test(path);
 
 const isAdminPath = (path: string) =>
   path === "/admin" || path.startsWith("/admin/");

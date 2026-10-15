@@ -1,10 +1,8 @@
 import type { AlertProps } from "../../types/components";
 
-const Alert = ({ variant = "error", children }: AlertProps) => (
-  <div
-    className={`alert alert-${variant}`}
-    role={variant === "error" ? "alert" : "status"}
-  >
+/** Inline error box (page / form level). Success messages use the common toast instead. */
+const Alert = ({ children }: AlertProps) => (
+  <div className="alert alert-error" role="alert">
     {children}
   </div>
 );

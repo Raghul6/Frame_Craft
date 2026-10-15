@@ -13,7 +13,7 @@ import {
 const initialState: OrdersState = {
   list: createListState<OrderSummary>(),
   detail: { order: null, status: "idle", error: null },
-  statusUpdate: { status: "idle", error: null },
+  statusUpdate: { status: "idle" },
 };
 
 const ordersSlice = createSlice({
@@ -29,7 +29,7 @@ const ordersSlice = createSlice({
     orderDetailStart: (state, action: PayloadAction<number>) => {
       state.detail.status = "loading";
       state.detail.error = null;
-      state.statusUpdate = { status: "idle", error: null };
+      state.statusUpdate = { status: "idle" };
       if (state.detail.order?.id !== action.payload) state.detail.order = null;
     },
     orderDetailSuccess: (state, action: PayloadAction<OrderDetail>) => {
@@ -42,7 +42,7 @@ const ordersSlice = createSlice({
     },
 
     orderStatusStart: (state) => {
-      state.statusUpdate = { status: "loading", error: null };
+      state.statusUpdate = { status: "loading" };
     },
     orderStatusSuccess: (state, action: PayloadAction<OrderDetail>) => {
       state.statusUpdate.status = "succeeded";
@@ -50,8 +50,8 @@ const ordersSlice = createSlice({
       const row = state.list.items.find((o) => o.id === action.payload.id);
       if (row) row.status = action.payload.status;
     },
-    orderStatusFail: (state, action: PayloadAction<string>) => {
-      state.statusUpdate = { status: "failed", error: action.payload };
+    orderStatusFail: (state) => {
+      state.statusUpdate = { status: "failed" };
     },
   },
   extraReducers: (builder) => {

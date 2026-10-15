@@ -1,5 +1,5 @@
 // Keep these rules in sync with server/src/constants/auth.ts.
-import type { PasswordRule } from "../types/auth";
+import type { PasswordRule, UserRole } from "../types/auth";
 
 export const USERNAME_REGEX = /^[a-zA-Z0-9_.]{3,30}$/;
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -64,3 +64,12 @@ export const CONTACT_FIELDS = {
 } as const;
 
 export const CONTACT_TYPES = ["email", "mobile"] as const;
+
+/** Roles allowed into the admin panel (used by every admin route). */
+export const ADMIN_ROLES: readonly UserRole[] = ["admin"];
+
+/**
+ * An in-app path ("/orders"). Rejects "//evil.com" and "/\\evil.com" — browsers
+ * treat both as links to another site — so a post-login redirect can't leave the app.
+ */
+export const SAFE_INTERNAL_PATH_REGEX = /^\/(?![/\\])/;

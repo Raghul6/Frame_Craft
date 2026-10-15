@@ -1,5 +1,6 @@
 import { lazyWithPreload } from "../utils/lazyWithPreload";
 import type { AppRoute } from "../types/routes";
+import { ADMIN_ROLES } from "../constants/auth";
 
 // Every page is code-split — each loads on first visit to its route, so storefront
 // visitors never download admin code.
@@ -55,49 +56,49 @@ const routes: AppRoute[] = [
   {
     path: "/admin",
     name: "Dashboard",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminDashboard,
   },
   {
     path: "/admin/orders",
     name: "Orders",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminOrders,
   },
   {
     path: "/admin/orders/:id",
     name: "Order Detail",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminOrderDetail,
   },
   {
     path: "/admin/frames",
     name: "Frames",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminFrames,
   },
   {
     path: "/admin/frames/new",
     name: "Add Frame",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminFrameForm,
   },
   {
     path: "/admin/frames/:id",
     name: "Edit Frame",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminFrameForm,
   },
   {
     path: "/admin/users",
     name: "Users",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminUsers,
   },
   {
     path: "/admin/users/:id",
     name: "User Detail",
-    roles: ["admin"],
+    roles: ADMIN_ROLES,
     component: AdminUserDetail,
   },
 ];

@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { CATEGORIES, IMAGE_SIZES } from "../../constants/home";
 import { HOME_SECTIONS } from "../../constants/navigation";
 import { revealOrder } from "../../utils/motion";
+import { ICON_SIZE } from "../../constants/ui";
 
 const CategorySection = () => (
   <section id={HOME_SECTIONS.shop} className="container py-2xl">
@@ -40,7 +41,7 @@ const CategorySection = () => (
               <span className="category-desc">{c.desc}</span>
             </div>
             <button className="icon-btn" aria-label={`Shop ${c.title}`}>
-              <ArrowUpRight size={16} />
+              <ArrowUpRight size={ICON_SIZE.md} />
             </button>
           </div>
         </div>

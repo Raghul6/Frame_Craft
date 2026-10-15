@@ -16,6 +16,13 @@ import type { OrderStatus } from "../../../types/admin";
 import type { OrderStatusDraft } from "../../../types/forms";
 import { formatDateTime, formatMoney } from "../../../utils/format";
 import "./AdminOrderDetailPage.css";
+import ButtonLabel from "../../../components/common/ButtonLabel";
+import {
+  BUTTON_LABELS,
+  EMPTY_MESSAGES,
+  INVALID_LINK_MESSAGES,
+} from "../../../constants/messages";
+import { EMPTY_VALUE } from "../../../constants/ui";
 
 const AdminOrderDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +56,7 @@ const AdminOrderDetailPage = () => {
   if (!id) {
     return (
       <div className="admin-page">
-        <Alert>That order link is not valid.</Alert>
+        <Alert>{INVALID_LINK_MESSAGES.order}</Alert>
       </div>
     );
   }
@@ -95,12 +102,14 @@ const AdminOrderDetailPage = () => {
                   onClick={save}
                   disabled={saving || selected === current.status}
                 >
-                  {saving ? "Saving…" : "Update"}
+                  <ButtonLabel
+                    loading={saving}
+                    {...BUTTON_LABELS.updateStatus}
+                  />
                 </button>
               </div>
             }
           />
-          {statusUpdate.error && <Alert>{statusUpdate.error}</Alert>}
 
           <div className="detail-grid">
             <section className="admin-panel">
@@ -113,20 +122,22 @@ const AdminOrderDetailPage = () => {
                   </Link>
                 </dd>
                 <dt>Email</dt>
-                <dd>{current.customer.email ?? "—"}</dd>
+                <dd>{current.customer.email ?? EMPTY_VALUE}</dd>
                 <dt>Mobile</dt>
-                <dd>{current.customer.mobile ?? "—"}</dd>
+                <dd>{current.customer.mobile ?? EMPTY_VALUE}</dd>
               </dl>
             </section>
             <section className="admin-panel">
               <h2>Shipping</h2>
               <dl className="detail-list">
                 <dt>Name</dt>
-                <dd>{current.shippingName || "—"}</dd>
+                <dd>{current.shippingName || EMPTY_VALUE}</dd>
                 <dt>Phone</dt>
-                <dd>{current.shippingPhone || "—"}</dd>
+                <dd>{current.shippingPhone || EMPTY_VALUE}</dd>
                 <dt>Address</dt>
-                <dd className="pre-line">{current.shippingAddress || "—"}</dd>
+                <dd className="pre-line">
+                  {current.shippingAddress || EMPTY_VALUE}
+                </dd>
               </dl>
             </section>
           </div>
@@ -134,7 +145,7 @@ const AdminOrderDetailPage = () => {
           <section className="admin-panel">
             <h2>Items</h2>
             {current.items.length === 0 ? (
-              <div className="admin-empty">This order has no items.</div>
+              <div className="admin-empty">{EMPTY_MESSAGES.orderItems}</div>
             ) : (
               <div className="admin-table-wrap">
                 <table className="admin-table">

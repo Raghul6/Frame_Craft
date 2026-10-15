@@ -40,17 +40,13 @@ export interface OrdersState {
     status: RequestStatus;
     error: string | null;
   };
-  statusUpdate: { status: RequestStatus; error: string | null };
+  statusUpdate: { status: RequestStatus };
 }
 
 export interface FramesState {
   list: ListState<Frame>;
   /** The frame loaded into the edit form. */
   current: { frame: Frame | null; status: RequestStatus; error: string | null };
-  save: {
-    status: RequestStatus;
-    error: string | null;
-    fieldErrors: FieldErrors;
-  };
-  remove: { id: number | null; error: string | null };
+  save: { status: RequestStatus; fieldErrors: FieldErrors };
+  remove: { id: number | null };
 }

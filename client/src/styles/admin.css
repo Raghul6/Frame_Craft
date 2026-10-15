@@ -777,3 +777,34 @@
 .admin-search-clear {
   animation: fade-in var(--duration-fast) var(--ease-out) both;
 }
+
+/* The list progress bar sits on the panel's top edge. */
+.admin-panel-list {
+  position: relative;
+  overflow: hidden;
+}
+
+/* A deleted row flashes red, slides right and fades out (ROW_REMOVE_ANIMATION_MS = 400ms). */
+.admin-table tbody tr.row-removing {
+  pointer-events: none;
+  animation: row-remove 400ms var(--ease-in-out) forwards;
+}
+
+.admin-table tbody tr.row-removing td {
+  background: #fbeaea;
+}
+
+@keyframes row-remove {
+  0% {
+    opacity: 1;
+    transform: none;
+  }
+  30% {
+    opacity: 1;
+    transform: translateX(-6px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}

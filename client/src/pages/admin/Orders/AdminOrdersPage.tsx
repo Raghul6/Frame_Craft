@@ -6,6 +6,7 @@ import { ORDER_FILTER_OPTIONS } from "../../../constants/admin";
 import { selectOrdersList } from "../../../features/orders/selectors";
 import { fetchOrders } from "../../../features/orders/thunks";
 import { useAdminList } from "../../../hooks/useAdminList";
+import { EMPTY_MESSAGES } from "../../../constants/messages";
 
 const AdminOrdersPage = () => {
   const { list, ...filters } = useAdminList({
@@ -39,8 +40,8 @@ const AdminOrdersPage = () => {
         onPageChange={filters.setPage}
         emptyText={
           filters.search || filters.filter
-            ? "No orders match these filters."
-            : "No orders yet."
+            ? EMPTY_MESSAGES.ordersFiltered
+            : EMPTY_MESSAGES.ordersNone
         }
       >
         <OrdersTable orders={list.items} emptyText="" />

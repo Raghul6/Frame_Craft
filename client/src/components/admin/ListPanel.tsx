@@ -1,32 +1,35 @@
 import type { ListPanelProps } from "../../types/components";
 import Alert from "../common/Alert";
 import Pagination from "../common/Pagination";
-import Spinner from "../common/Spinner";
+import TableSkeleton from "./TableSkeleton";
+import { ADMIN_TABLE_COLUMNS } from "../../constants/ui";
 
 /**
- * The panel around every admin list: error alert, first-load spinner, empty
- * message, the table (dimmed while a newer page loads) and pagination.
+ * The panel around every admin list: error alert, shimmering placeholder rows on the
+ * first load, a progress bar + dimmed rows while a newer page/search loads, the empty
+ * message, and pagination.
  */
 const ListPanel = <T,>({
   list,
+  skeletonColumns = ADMIN_TABLE_COLUMNS,
   emptyText,
   onPageChange,
   children,
 }: ListPanelProps<T>) => {
-  const firstLoad = list.status === "loading" && list.items.length === 0;
+  const loading = list.status === "loading";
+  const firstLoad = loading && list.items.length === 0;
 
   return (
     <>
       {list.error && <Alert>{list.error}</Alert>}
-      <section className="admin-panel">
+      <section className="admin-panel admin-panel-list" aria-busy={loading}>
+        {loading && !firstLoad && <div className="loading-bar" aria-hidden />}
         {firstLoad ? (
-          <Spinner full />
+          <TableSkeleton columns={skeletonColumns} />
         ) : list.items.length === 0 ? (
           <div className="admin-empty">{emptyText}</div>
         ) : (
-          <div className={list.status === "loading" ? "is-loading" : undefined}>
-            {children}
-          </div>
+          <div className={loading ? "is-loading" : undefined}>{children}</div>
         )}
         <Pagination
           page={list.page}

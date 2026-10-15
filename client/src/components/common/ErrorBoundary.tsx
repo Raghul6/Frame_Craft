@@ -4,6 +4,7 @@ import type {
   ErrorBoundaryState,
 } from "../../types/components";
 import { reportError } from "../../utils/errors";
+import { ERROR_FALLBACK_TEXT } from "../../constants/messages";
 
 /**
  * Catches errors thrown while rendering its children (try/catch can't catch those)
@@ -35,11 +36,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         className={`error-fallback${this.props.inline ? " inline" : ""}`}
         role="alert"
       >
-        <h2>Something went wrong</h2>
-        <p>
-          This part of the page failed to load. You can try again, or go back to
-          the home page.
-        </p>
+        <h2>{ERROR_FALLBACK_TEXT.title}</h2>
+        <p>{ERROR_FALLBACK_TEXT.message}</p>
         <div className="error-fallback-actions">
           <button
             type="button"

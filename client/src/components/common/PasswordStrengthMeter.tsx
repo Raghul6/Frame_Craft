@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { PASSWORD_RULES, STRENGTH_BARS } from "../../constants/auth";
 import type { PasswordStrengthMeterProps } from "../../types/components";
 import { getPasswordStrength } from "../../utils/passwordStrength";
+import { ICON_SIZE } from "../../constants/ui";
 
 const PasswordStrengthMeter = ({ password }: PasswordStrengthMeterProps) => {
   const { level, label } = useMemo(
@@ -26,7 +27,8 @@ const PasswordStrengthMeter = ({ password }: PasswordStrengthMeterProps) => {
           const ok = rule.test(password);
           return (
             <li key={rule.id} className={ok ? "ok" : ""}>
-              {ok ? <Check size={12} /> : <X size={12} />} {rule.label}
+              {ok ? <Check size={ICON_SIZE.xs} /> : <X size={ICON_SIZE.xs} />}{" "}
+              {rule.label}
             </li>
           );
         })}

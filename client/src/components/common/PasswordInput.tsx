@@ -1,6 +1,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import type { PasswordInputProps } from "../../types/components";
+import { ICON_SIZE } from "../../constants/ui";
 
 const PasswordInput = (props: PasswordInputProps) => {
   const [visible, setVisible] = useState(false);
@@ -14,7 +15,7 @@ const PasswordInput = (props: PasswordInputProps) => {
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? "Hide password" : "Show password"}
       >
-        {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+        {visible ? <EyeOff size={ICON_SIZE.md} /> : <Eye size={ICON_SIZE.md} />}
       </button>
     </div>
   );

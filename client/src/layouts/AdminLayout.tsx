@@ -6,7 +6,7 @@ import ErrorBoundary from "../components/common/ErrorBoundary";
 import { useHasNavigated } from "../hooks/useHasNavigated";
 import Spinner from "../components/common/Spinner";
 import { ADMIN_NAV } from "../constants/admin";
-import { BRAND_NAME, LOGO } from "../constants/ui";
+import { ADMIN_LOGO_SIZE, BRAND_NAME, ICON_SIZE, LOGO } from "../constants/ui";
 import { logout } from "../features/auth/thunks";
 import { useAuth } from "../hooks/useAuth";
 import "../styles/admin.css";
@@ -21,14 +21,19 @@ const AdminLayout = () => {
     <div className="admin-shell">
       <header className="admin-topbar">
         <Link to="/admin" className="admin-brand">
-          <img src={LOGO.src} alt="" width={40} height={40} />
+          <img
+            src={LOGO.src}
+            alt=""
+            width={ADMIN_LOGO_SIZE}
+            height={ADMIN_LOGO_SIZE}
+          />
           <span>
             {BRAND_NAME} <small>Admin</small>
           </span>
         </Link>
         <div className="admin-topbar-actions">
           <Link to="/" className="admin-topbar-link">
-            <Store size={16} /> <span>View store</span>
+            <Store size={ICON_SIZE.md} /> <span>View store</span>
           </Link>
           <span className="admin-topbar-user" title={user?.username}>
             {user?.username}
@@ -38,7 +43,7 @@ const AdminLayout = () => {
             className="admin-topbar-link"
             onClick={() => dispatch(logout())}
           >
-            <LogOut size={16} /> <span>Logout</span>
+            <LogOut size={ICON_SIZE.md} /> <span>Logout</span>
           </button>
         </div>
       </header>
@@ -46,7 +51,7 @@ const AdminLayout = () => {
       <nav className="admin-nav" aria-label="Admin">
         {ADMIN_NAV.map(({ to, label, icon: Icon, end }) => (
           <NavLink key={to} to={to} end={end} className="admin-nav-link">
-            <Icon size={18} />
+            <Icon size={ICON_SIZE.lg} />
             <span>{label}</span>
           </NavLink>
         ))}

@@ -5,6 +5,7 @@ import { logout } from "../features/auth/thunks";
 import dashboardReducer from "../features/dashboard/slice";
 import framesReducer from "../features/frames/slice";
 import ordersReducer from "../features/orders/slice";
+import toastReducer from "../features/toast/slice";
 import usersReducer from "../features/users/slice";
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
     users: usersReducer,
     orders: ordersReducer,
     frames: framesReducer,
+    toast: toastReducer,
   },
   // Admin pages hold customer emails, phones and addresses — keep them out of
   // Redux DevTools in production.

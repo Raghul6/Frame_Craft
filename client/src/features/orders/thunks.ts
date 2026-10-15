@@ -9,7 +9,9 @@ import type {
 } from "../../types/admin";
 import type { ListQuery, Paginated } from "../../types/api";
 import { extractError, isAbortError } from "../../utils/apiError";
+import { LOAD_ERROR_MESSAGES, TOAST_MESSAGES } from "../../constants/messages";
 import { createLatestRequest, toQueryParams } from "../shared/latestRequest";
+import { showToast } from "../toast/thunks";
 import {
   orderDetailFail,
   orderDetailStart,
@@ -37,7 +39,7 @@ export const fetchOrders = (query: ListQuery) => async (dispatch: Dispatch) => {
     return response.data;
   } catch (error) {
     if (isAbortError(error)) return;
-    dispatch(ordersFail(extractError(error, "Could not load orders")));
+    dispatch(ordersFail(extractError(error, LOAD_ERROR_MESSAGES.orders)));
   } finally {
     listRequest.finish(controller);
   }
@@ -55,7 +57,7 @@ export const fetchOrder = (id: number) => async (dispatch: Dispatch) => {
     return response.data.order;
   } catch (error) {
     if (isAbortError(error)) return;
-    dispatch(orderDetailFail(extractError(error, "Could not load this order")));
+    dispatch(orderDetailFail(extractError(error, LOAD_ERROR_MESSAGES.order)));
   } finally {
     detailRequest.finish(controller);
   }
@@ -71,10 +73,18 @@ export const changeOrderStatus =
         { status },
       );
       dispatch(orderStatusSuccess(response.data.order));
+      showToast(
+        dispatch,
+        "success",
+        TOAST_MESSAGES.orderStatusUpdated(id, status),
+      );
       return response.data.order;
     } catch (error) {
-      dispatch(
-        orderStatusFail(extractError(error, "Could not update the status")),
+      dispatch(orderStatusFail());
+      showToast(
+        dispatch,
+        "error",
+        extractError(error, TOAST_MESSAGES.orderStatusFailed),
       );
     }
   };
