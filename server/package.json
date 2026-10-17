@@ -7,7 +7,7 @@
     "start": "tsx watch src/index.ts",
     "dev": "tsx watch src/index.ts",
     "build": "tsc && node -e \"require('fs').cpSync('src/db/migrations','dist/db/migrations',{recursive:true})\"",
-    "start:prod": "NODE_ENV=production node dist/index.js",
+    "start:prod": "node dist/db/migrate.js && node dist/index.js",
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx src/db/migrate.ts",
     "create-admin": "tsx src/db/createAdmin.ts",
@@ -36,5 +36,8 @@
     "prettier": "^3.6.2",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

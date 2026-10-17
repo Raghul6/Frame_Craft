@@ -18,7 +18,7 @@ const contentSecurityPolicy = (apiHost: string): Plugin => {
     "font-src 'self' https://fonts.gstatic.com",
     // Frame photos can be any https:// image URL.
     "img-src 'self' https: data:",
-    `connect-src 'self' ${apiHost}`,
+    `connect-src 'self'${apiHost ? ` ${apiHost}` : ""}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
@@ -58,7 +58,10 @@ const VENDOR_CHUNKS = [
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
-  const apiHost = (env.VITE_API_HOST || DEFAULT_API_HOST).replace(/\/+$/, "");
+  // Not set in a production build → the app calls its own site (see src/config/env.ts).
+  const apiHost = (
+    env.VITE_API_HOST ?? (mode === "production" ? "" : DEFAULT_API_HOST)
+  ).replace(/\/+$/, "");
 
   return {
     plugins: [react(), contentSecurityPolicy(apiHost)],
